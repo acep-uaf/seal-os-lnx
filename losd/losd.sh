@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Linux OS Detector (LOSD) Bash Script
 # Description: To provide a universal Linux OS Versions detector for consistent apples to apples os independent comparision using native tool.
@@ -21,8 +21,6 @@ done
 # Determine the directory full path where this losd.sh file is located.
 # This is used to source the losd-lib.sh file.
 rundir=$(realpath $(dirname $0))
-
-source $rundir/losd-lib.sh
 
 # Check to see if the losd-lib.sh file exists and is readable.
 if [ ! -r $rundir/losd-lib.sh ]; then
