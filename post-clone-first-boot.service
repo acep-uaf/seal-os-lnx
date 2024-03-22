@@ -1,0 +1,10 @@
+[Unit]
+Description=Post Clone first boot OS initialization.
+
+[Service]
+ExecStart=PATH_DIR/post-clone-first-boot.sh
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
