@@ -1,7 +1,7 @@
 [Unit]
-Description=Post Clone first boot OS initialization.
-Before=network-pre.target
-Wants=network-pre.target
+Description=Post Clone First Boot OS initialization.
+#Before=network-pre.target
+#Wants=network-pre.target
 
 [Service]
 ExecStart=PATH_DIR/post-clone-first-boot.sh

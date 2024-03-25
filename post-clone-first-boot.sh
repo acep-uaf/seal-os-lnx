@@ -88,7 +88,7 @@ case $os_name in
 #        systemctl daemon-reload
 
         # Reboot the system
-        # shutdown -r now
+        shutdown -r now
     fi
 
     ;;
