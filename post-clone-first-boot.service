@@ -1,5 +1,6 @@
 [Unit]
 Description=Post Clone first boot OS initialization.
+Before=network.target sshd.service
 
 [Service]
 ExecStart=PATH_DIR/post-clone-first-boot.sh
