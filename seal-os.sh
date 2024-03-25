@@ -40,8 +40,7 @@ if [ ! -r $rundir/losd/losd-lib.sh ]; then
 fi
 
 # Defined supported OS
-# supported_os=("Ubuntu" "Debian")
-supported_os=("Ubuntu")
+supported_os=("Ubuntu" "Debian")
 
 # Source the losd-lib.sh file.
 source $rundir/losd/losd-lib.sh
@@ -114,7 +113,30 @@ case $os_name in
         ;;
 
     "Debian")
+    # Run Apt Clean
+    apt clean
 
+    # Set /etc/hostname to localhost
+    echo "localhost" > /etc/hostname
+
+    # Update PATH_DIR in $rundir/post-clone-first-boot.service
+    # Copy $rundir/post-clone-first-boot.service to /etc/systemd/system/post-clone-first-boot.service
+    cat $rundir/post-clone-first-boot.service | sed "s|PATH_DIR|$rundir|g" > /etc/systemd/system/post-clone-first-boot.service
+
+    # systemctl enable post-clone-first-boot.service
+    systemctl enable post-clone-first-boot.service
+
+    # rm /etc/ssh/ssh_host_*
+    rm /etc/ssh/ssh_host_*
+
+    # rm /etc/machine-id
+    rm /etc/machine-id
+
+    # rm /var/lib/dbus/machine-id
+    rm /var/lib/dbus/machine-id
+
+    # find /var/log -type f -delete
+    find /var/log -type f -delete
         ;;
 
     *)

@@ -33,8 +33,7 @@ if [ ! -r $rundir/losd/losd-lib.sh ]; then
 fi
 
 # Defined supported OS
-# supported_os=("Ubuntu" "Debian")
-supported_os=("Ubuntu")
+supported_os=("Ubuntu" "Debian")
 
 # Source the losd-lib.sh file.
 source $rundir/losd/losd-lib.sh
@@ -98,7 +97,30 @@ case $os_name in
     ;;
 
     "Debian")
+    # Check if SSH keys are already present befor generating new ones.
+    if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then
+        # Generate the SSH keys
+        dpkg-reconfigure openssh-server
 
+        # Regenerate a new machine-id
+        systemd-machine-id-setup
+        systemctl restart dbus
+
+        # If hostname is 'localhost' then notify users to change it upon logging in.
+        # if [ "$(hostname)" == "localhost" ]; then
+        #     echo "WARNING: Hostname is set to 'localhost'.  Please edit /etc/hostname."
+        # fi
+
+        # systemctl disable post-clone-first-boot.service
+        systemctl disable post-clone-first-boot.service
+#        rm /etc/systemd/system/post-clone-first-boot.service
+#        systemctl daemon-reload
+
+        # Logging Setup
+        $rundir/losd/losd.sh > $rundir/post-clone-first-boot.$ts.json
+
+        # Reboot the system
+        shutdown -r now
     ;;
 
     *)
