@@ -68,19 +68,25 @@ fi
 case $os_name in
     "Ubuntu")
 
-    # Check if SSH keys are already present
+    # Check if SSH keys are already present befor generating new ones.
     if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then
         # Generate the SSH keys
         dpkg-reconfigure openssh-server
-    fi
 
-    # Regenerate a new machine-id
-    systemd-machine-id-setup
-    systemctl restart dbus
+        # Regenerate a new machine-id
+        systemd-machine-id-setup
+        systemctl restart dbus
 
-    # If hostneme is 'localhost' then notify users to change it upon logging in.
-    if [ "$(hostname)" == "localhost" ]; then
-        echo "WARNING: Hostname is set to 'localhost'.  Please edit /etc/hostname."
+        # If hostname is 'localhost' then notify users to change it upon logging in.
+        # if [ "$(hostname)" == "localhost" ]; then
+        #     echo "WARNING: Hostname is set to 'localhost'.  Please edit /etc/hostname."
+        # fi
+
+        # systemctl disable post-clone-first-boot.service
+        systemctl disable post-clone-first-boot.service
+
+        # Reboot the system
+        shutdown -r now
     fi
 
     ;;
