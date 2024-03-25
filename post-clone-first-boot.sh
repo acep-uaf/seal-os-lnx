@@ -99,7 +99,7 @@ case $os_name in
 
     # Check if the hardware platform is a virtual machine.
     if [ "$hw_platform" != "vm" ]; then
-        echo "ERROR: This script is intended to be run on a virtual machine."
+        echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
         exit 1
     fi
 
