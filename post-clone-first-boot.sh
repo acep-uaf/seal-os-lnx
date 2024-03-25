@@ -44,6 +44,7 @@ losd_json=$(losd)
 os_name=$(echo $losd_json | jq '.DISTRO.NAME' | sed -r 's/"//g')
 os_version=$(echo $losd_json | jq '.DISTRO.VERSION' | sed -r 's/"//g')
 hw_platform=$(echo $losd_json | jq '.HARDWARE.HOSTNAMECTL.Chassis' | sed -r 's/"//g')
+ts=$(echo $losd_json | jq '.OS.NOW' | sed -r 's/"//g')
 
 # Check if the hardware platform is a virtual machine.
 if [ "$hw_platform" != "vm" ]; then
@@ -86,6 +87,9 @@ case $os_name in
         systemctl disable post-clone-first-boot.service
 #        rm /etc/systemd/system/post-clone-first-boot.service
 #        systemctl daemon-reload
+
+        # Logging Setup
+        $rundir/losd/losd.sh > $rundir/post-clone-first-boot.$ts.json
 
         # Reboot the system
         shutdown -r now
