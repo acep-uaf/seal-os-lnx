@@ -51,9 +51,15 @@ os_name=$(echo $losd_json | jq '.DISTRO.NAME' | sed -r 's/"//g')
 os_version=$(echo $losd_json | jq '.DISTRO.VERSION' | sed -r 's/"//g')
 hw_platform=$(echo $losd_json | jq '.HARDWARE.HOSTNAMECTL.Chassis' | tr -dc '[:print:]' | sed -r 's/\s//g' | sed -r 's/"//g')
 
-
 echo "OS Name: $os_name"
 echo "OS Version: $os_version"
+echo "Hardware Platform: $hw_platform"
+
+# Check if the hardware platform is a virtual machine.
+if [ "$hw_platform" != "vm" ]; then
+    echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
+    exit 1
+fi
 
 # Check if the OS is supported
 if [[ ! " ${supported_os[@]} " =~ " ${os_name} " ]]; then
@@ -80,72 +86,62 @@ echo "Proceeding to Seal Host ..."
 case $os_name in
     "Ubuntu")
 
-    # Check if the hardware platform is a virtual machine.
-    if [ "$hw_platform" != "vm" ]; then
-        echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
-        exit 1
-    fi
+        # Run Apt Clean
+        apt clean
 
-    # Run Apt Clean
-    apt clean
+        # Set /etc/hostname to localhost
+        echo "localhost" > /etc/hostname
 
-    # Set /etc/hostname to localhost
-    echo "localhost" > /etc/hostname
+        # Update PATH_DIR in $rundir/post-clone-first-boot.service
+        # Copy $rundir/post-clone-first-boot.service to /etc/systemd/system/post-clone-first-boot.service
+        cat $rundir/post-clone-first-boot.service | sed "s|PATH_DIR|$rundir|g" > /etc/systemd/system/post-clone-first-boot.service
 
-    # Update PATH_DIR in $rundir/post-clone-first-boot.service
-    # Copy $rundir/post-clone-first-boot.service to /etc/systemd/system/post-clone-first-boot.service
-    cat $rundir/post-clone-first-boot.service | sed "s|PATH_DIR|$rundir|g" > /etc/systemd/system/post-clone-first-boot.service
+        # systemctl enable post-clone-first-boot.service
+        systemctl enable post-clone-first-boot.service
 
-    # systemctl enable post-clone-first-boot.service
-    systemctl enable post-clone-first-boot.service
+        # rm /etc/ssh/ssh_host_*
+        rm /etc/ssh/ssh_host_*
 
-    # rm /etc/ssh/ssh_host_*
-    rm /etc/ssh/ssh_host_*
+        # rm /etc/machine-id
+        rm /etc/machine-id
 
-    # rm /etc/machine-id
-    rm /etc/machine-id
+        # rm /var/lib/dbus/machine-id
+        rm /var/lib/dbus/machine-id
 
-    # rm /var/lib/dbus/machine-id
-    rm /var/lib/dbus/machine-id
-
-    # find /var/log -type f -delete
-    find /var/log -type f -delete
-
+        # find /var/log -type f -delete
+        find /var/log -type f -delete
 
         ;;
 
     "Debian")
 
-    # Check if the hardware platform is a virtual machine.
-    if [ "$hw_platform" != "vm" ]; then
-        echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
-        exit 1
-    fi
+        # Check if the hardware platform is a virtual machine.
 
-    # Run Apt Clean
-    apt clean
+        # Run Apt Clean
+        apt clean
 
-    # Set /etc/hostname to localhost
-    echo "localhost" > /etc/hostname
+        # Set /etc/hostname to localhost
+        echo "localhost" > /etc/hostname
 
-    # Update PATH_DIR in $rundir/post-clone-first-boot.service
-    # Copy $rundir/post-clone-first-boot.service to /etc/systemd/system/post-clone-first-boot.service
-    cat $rundir/post-clone-first-boot.service | sed "s|PATH_DIR|$rundir|g" > /etc/systemd/system/post-clone-first-boot.service
+        # Update PATH_DIR in $rundir/post-clone-first-boot.service
+        # Copy $rundir/post-clone-first-boot.service to /etc/systemd/system/post-clone-first-boot.service
+        cat $rundir/post-clone-first-boot.service | sed "s|PATH_DIR|$rundir|g" > /etc/systemd/system/post-clone-first-boot.service
 
-    # systemctl enable post-clone-first-boot.service
-    systemctl enable post-clone-first-boot.service
+        # systemctl enable post-clone-first-boot.service
+        systemctl enable post-clone-first-boot.service
 
-    # rm /etc/ssh/ssh_host_*
-    rm /etc/ssh/ssh_host_*
+        # rm /etc/ssh/ssh_host_*
+        rm /etc/ssh/ssh_host_*
 
-    # rm /etc/machine-id
-    rm /etc/machine-id
+        # rm /etc/machine-id
+        rm /etc/machine-id
 
-    # rm /var/lib/dbus/machine-id
-    rm /var/lib/dbus/machine-id
+        # rm /var/lib/dbus/machine-id
+        rm /var/lib/dbus/machine-id
 
-    # find /var/log -type f -delete
-    find /var/log -type f -delete
+        # find /var/log -type f -delete
+        find /var/log -type f -delete
+        
         ;;
 
     *)

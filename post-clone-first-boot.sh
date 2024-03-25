@@ -49,6 +49,12 @@ ts=$(echo $losd_json | jq '.OS.NOW' | sed -r 's/"//g')
 # echo "OS Version: $os_version"
 # echo "Hardware Platform: $hw_platform"
 
+# Check if the hardware platform is a virtual machine.
+if [ "$hw_platform" != "vm" ]; then
+    echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
+    exit 1
+fi
+
 # Check if the OS is supported
 if [[ ! " ${supported_os[@]} " =~ " ${os_name} " ]]; then
     echo "ERROR: Unsupported OS detected: $os_name $os_version"
@@ -63,11 +69,6 @@ case $os_name in
 
     # Check if SSH keys are already present befor generating new ones.
     if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then
-        # Check if the hardware platform is a virtual machine.
-        if [ "$hw_platform" != "vm" ]; then
-            echo "ERROR: This script is intended to be run on a virtual machine.  [$hw_platform] detected."
-            exit 1
-        fi
 
         # Generate the SSH keys
         dpkg-reconfigure openssh-server
@@ -97,12 +98,6 @@ case $os_name in
 
     "Debian")
 
-    # Check if the hardware platform is a virtual machine.
-    if [ "$hw_platform" != "vm" ]; then
-        echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
-        exit 1
-    fi
-
     # Check if SSH keys are already present befor generating new ones.
     if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then
         # Generate the SSH keys
@@ -127,6 +122,8 @@ case $os_name in
 
         # Reboot the system
         shutdown -r now
+    fi
+
     ;;
 
     *)
