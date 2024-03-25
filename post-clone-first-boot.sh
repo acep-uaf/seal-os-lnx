@@ -84,6 +84,8 @@ case $os_name in
 
         # systemctl disable post-clone-first-boot.service
         systemctl disable post-clone-first-boot.service
+        rm /etc/systemd/system/post-clone-first-boot.service
+        systemctl daemon-reload
 
         # Reboot the system
         shutdown -r now
