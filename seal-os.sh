@@ -51,11 +51,6 @@ os_name=$(echo $losd_json | jq '.DISTRO.NAME' | sed -r 's/"//g')
 os_version=$(echo $losd_json | jq '.DISTRO.VERSION' | sed -r 's/"//g')
 hw_platform=$(echo $losd_json | jq '.HARDWARE.HOSTNAMECTL.Chassis' | sed -r 's/"//g')
 
-# Check if the hardware platform is a virtual machine.
-if [ "$hw_platform" != "vm" ]; then
-    echo "ERROR: This script is intended to be run on a virtual machine."
-    exit 1
-fi
 
 echo "OS Name: $os_name"
 echo "OS Version: $os_version"
@@ -84,6 +79,13 @@ echo "Proceeding to Seal Host ..."
 # Case statement to determine the OS version to customize OS Sealing Steps.
 case $os_name in
     "Ubuntu")
+
+    # Check if the hardware platform is a virtual machine.
+    if [ "$hw_platform" != "vm" ]; then
+        echo "ERROR: This script is intended to be run on a virtual machine."
+        exit 1
+    fi
+
     # Run Apt Clean
     apt clean
 
@@ -113,6 +115,13 @@ case $os_name in
         ;;
 
     "Debian")
+
+    # Check if the hardware platform is a virtual machine.
+    if [ "$hw_platform" != "vm" ]; then
+        echo "ERROR: This script is intended to be run on a virtual machine."
+        exit 1
+    fi
+
     # Run Apt Clean
     apt clean
 
