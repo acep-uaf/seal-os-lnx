@@ -125,4 +125,4 @@ esac
 
 
 # Shutdown Host - Commented Out for testing
-# shutdown -h now
+shutdown -h now
