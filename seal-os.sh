@@ -49,7 +49,7 @@ losd_json=$(losd)
 
 os_name=$(echo $losd_json | jq '.DISTRO.NAME' | sed -r 's/"//g')
 os_version=$(echo $losd_json | jq '.DISTRO.VERSION' | sed -r 's/"//g')
-hw_platform=$(echo $losd_json | jq '.HARDWARE.HOSTNAMECTL.Chassis' | sed -r 's/"//g')
+hw_platform=$(echo $losd_json | jq '.HARDWARE.HOSTNAMECTL.Chassis' | tr -dc '[:print:]' | sed -r 's/\s//g' | sed -r 's/"//g')
 
 
 echo "OS Name: $os_name"
@@ -82,7 +82,7 @@ case $os_name in
 
     # Check if the hardware platform is a virtual machine.
     if [ "$hw_platform" != "vm" ]; then
-        echo "ERROR: This script is intended to be run on a virtual machine."
+        echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
         exit 1
     fi
 
@@ -118,7 +118,7 @@ case $os_name in
 
     # Check if the hardware platform is a virtual machine.
     if [ "$hw_platform" != "vm" ]; then
-        echo "ERROR: This script is intended to be run on a virtual machine."
+        echo "ERROR: This script is intended to be run on a virtual machine. [$hw_platform] detected."
         exit 1
     fi
 
