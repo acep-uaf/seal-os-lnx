@@ -72,6 +72,7 @@ for os in "${supported_os[@]}"; do
     echo "OS Supported: $os_supported"
 done
 
+echo "OS Supported: $os_supported"
 if [[ "$os_supported" == false ]]; then
     echo "ERROR: Unsupported OS detected: $os_name $os_version"
     exit 1
