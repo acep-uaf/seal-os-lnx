@@ -1,11 +1,13 @@
 # seal-os-lnx
 Linux OS Sealer for creating Linux VM OS Templates from which other VMs can be uniquely cloned.
 
-- **Version**: 1.0.0 2024-03-25
+- **Version**: 1.0.1 2025-01-22
 
 ## Distro's Tested
 - Debian 12
 - Ubuntu 22.04
+- Rocky 9
+- Zorin OS 17
 
 
 ## Usage

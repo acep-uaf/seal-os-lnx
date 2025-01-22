@@ -92,6 +92,14 @@ function losd () {
       install_date=`stat -c %w /`
       ;;
 
+    "Zorin OS")
+      dist_name=$os_name
+      dist_vers=$os_vers
+      known_os=1
+      # install_date=`stat -c %y /var/log/installer`
+      install_date=`stat -c %w /`
+      ;;
+
     "Linux Mint")
       dist_name="LinuxMint"
       dist_vers=$os_vers

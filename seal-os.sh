@@ -2,8 +2,8 @@
 
 # SEAL OS Detector (SEAL-OS) Bash Script
 # Description: To provide a universal Linux OS Versions detector for consistent apples to apples os independent comparision using native tool.
-# Verson: 1.0.0
-# Version_Date: 2024-03-25
+# Verson: 1.0.1
+# Version_Date: 2025-01-22
 # Author: John Haverlack (jehaverlack@alaska.edu)
 # License: MIT (Proposed/Pending) / UAF Only
 # Source: https://github.com/acep-uaf/seal-os-lnx
@@ -40,7 +40,7 @@ if [ ! -r $rundir/losd/losd-lib.sh ]; then
 fi
 
 # Defined supported OS
-supported_os=("Ubuntu" "Debian")
+supported_os=("Ubuntu" "Debian", "Zorin OS")
 
 # Source the losd-lib.sh file.
 source $rundir/losd/losd-lib.sh
@@ -119,6 +119,37 @@ case $os_name in
 
         # Run Apt Clean
         apt clean
+
+        # Set /etc/hostname to localhost
+        echo "localhost" > /etc/hostname
+
+        # Update PATH_DIR in $rundir/post-clone-first-boot.service
+        # Copy $rundir/post-clone-first-boot.service to /etc/systemd/system/post-clone-first-boot.service
+        cat $rundir/post-clone-first-boot.service | sed "s|PATH_DIR|$rundir|g" > /etc/systemd/system/post-clone-first-boot.service
+
+        # systemctl enable post-clone-first-boot.service
+        systemctl enable post-clone-first-boot.service
+
+        # rm /etc/ssh/ssh_host_*
+        rm /etc/ssh/ssh_host_*
+
+        # rm /etc/machine-id
+        rm /etc/machine-id
+
+        # rm /var/lib/dbus/machine-id
+        rm /var/lib/dbus/machine-id
+
+        # find /var/log -type f -delete
+        find /var/log -type f -delete
+        
+        ;;
+
+        "Rocky")
+
+        # Check if the hardware platform is a virtual machine.
+
+        # Run DNF Clean
+        dnf clean all
 
         # Set /etc/hostname to localhost
         echo "localhost" > /etc/hostname
