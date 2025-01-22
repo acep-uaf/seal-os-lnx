@@ -62,23 +62,6 @@ if [ "$hw_platform" != "vm" ]; then
 fi
 
 # Check if the OS is supported
-# os_supported=false
-# for os in "${supported_os[@]}"; do
-#     echo "$os_name <=> $os"
-#     if [[ "$os_name" == "$os" ]]; then
-#         os_supported=true
-#         break
-#     fi
-#     echo "OS Supported: $os_supported"
-# done
-
-# echo "OS Supported Final: $os_supported"
-# if [[ "$os_supported" == false ]]; then
-#     echo "ERROR: Unsupported OS detected: $os_name $os_version"
-#     exit 1
-# fi
-
-# Check if the OS is supported
 if [[ ! " ${supported_os[@]} " =~ " ${os_name} " ]]; then
     echo "ERROR: Unsupported OS detected: $os_name $os_version"
     exit 1
