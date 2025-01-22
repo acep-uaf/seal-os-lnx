@@ -69,6 +69,7 @@ for os in "${supported_os[@]}"; do
         os_supported=true
         break
     fi
+    echo "OS Supported: $os_supported"
 done
 
 if [[ "$os_supported" == false ]]; then
