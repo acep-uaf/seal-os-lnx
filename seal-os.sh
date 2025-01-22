@@ -40,7 +40,7 @@ if [ ! -r $rundir/losd/losd-lib.sh ]; then
 fi
 
 # Defined supported OS
-supported_os=("Ubuntu" "Debian", "Zorin OS")
+supported_os=("Ubuntu" "Debian" "Zorin OS")
 
 # Source the losd-lib.sh file.
 source $rundir/losd/losd-lib.sh
