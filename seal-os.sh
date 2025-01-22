@@ -62,10 +62,24 @@ if [ "$hw_platform" != "vm" ]; then
 fi
 
 # Check if the OS is supported
-if [[ ! " ${supported_os[*]} " =~ " ${os_name} " ]]; then
+os_supported=false
+for os in "${supported_os[@]}"; do
+    if [[ "$os_name" == "$os" ]]; then
+        os_supported=true
+        break
+    fi
+done
+
+if [[ "$os_supported" == false ]]; then
     echo "ERROR: Unsupported OS detected: $os_name $os_version"
     exit 1
 fi
+
+# # Check if the OS is supported
+# if [[ ! " ${supported_os[*]} " =~ " ${os_name} " ]]; then
+#     echo "ERROR: Unsupported OS detected: $os_name $os_version"
+#     exit 1
+# fi
 
 echo "WARNING: Do not run this script on production systems!!!"
 echo "This script [seal-os.sh] will *seal* this system image for cloning purposes."
