@@ -62,27 +62,27 @@ if [ "$hw_platform" != "vm" ]; then
 fi
 
 # Check if the OS is supported
-os_supported=false
-for os in "${supported_os[@]}"; do
-    echo "$os_name <=> $os"
-    if [[ "$os_name" == "$os" ]]; then
-        os_supported=true
-        break
-    fi
-    echo "OS Supported: $os_supported"
-done
+# os_supported=false
+# for os in "${supported_os[@]}"; do
+#     echo "$os_name <=> $os"
+#     if [[ "$os_name" == "$os" ]]; then
+#         os_supported=true
+#         break
+#     fi
+#     echo "OS Supported: $os_supported"
+# done
 
-echo "OS Supported Final: $os_supported"
-if [[ "$os_supported" == false ]]; then
-    echo "ERROR: Unsupported OS detected: $os_name $os_version"
-    exit 1
-fi
-
-# # Check if the OS is supported
-# if [[ ! " ${supported_os[*]} " =~ " ${os_name} " ]]; then
+# echo "OS Supported Final: $os_supported"
+# if [[ "$os_supported" == false ]]; then
 #     echo "ERROR: Unsupported OS detected: $os_name $os_version"
 #     exit 1
 # fi
+
+# Check if the OS is supported
+if [[ ! " ${supported_os[@]} " =~ " ${os_name} " ]]; then
+    echo "ERROR: Unsupported OS detected: $os_name $os_version"
+    exit 1
+fi
 
 echo "WARNING: Do not run this script on production systems!!!"
 echo "This script [seal-os.sh] will *seal* this system image for cloning purposes."
@@ -131,6 +131,37 @@ case $os_name in
         ;;
 
     "Debian")
+
+        # Check if the hardware platform is a virtual machine.
+
+        # Run Apt Clean
+        apt clean
+
+        # Set /etc/hostname to localhost
+        echo "localhost" > /etc/hostname
+
+        # Update PATH_DIR in $rundir/post-clone-first-boot.service
+        # Copy $rundir/post-clone-first-boot.service to /etc/systemd/system/post-clone-first-boot.service
+        cat $rundir/post-clone-first-boot.service | sed "s|PATH_DIR|$rundir|g" > /etc/systemd/system/post-clone-first-boot.service
+
+        # systemctl enable post-clone-first-boot.service
+        systemctl enable post-clone-first-boot.service
+
+        # rm /etc/ssh/ssh_host_*
+        rm /etc/ssh/ssh_host_*
+
+        # rm /etc/machine-id
+        rm /etc/machine-id
+
+        # rm /var/lib/dbus/machine-id
+        rm /var/lib/dbus/machine-id
+
+        # find /var/log -type f -delete
+        find /var/log -type f -delete
+        
+        ;;
+
+    "Zorin OS")
 
         # Check if the hardware platform is a virtual machine.
 
