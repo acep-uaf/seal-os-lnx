@@ -64,6 +64,7 @@ fi
 # Check if the OS is supported
 os_supported=false
 for os in "${supported_os[@]}"; do
+    echo "$os_name <=> $os"
     if [[ "$os_name" == "$os" ]]; then
         os_supported=true
         break
