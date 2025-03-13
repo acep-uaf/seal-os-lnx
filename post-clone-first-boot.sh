@@ -33,7 +33,7 @@ if [ ! -r $rundir/losd/losd-lib.sh ]; then
 fi
 
 # Defined supported OS
-supported_os=("Ubuntu" "Debian", "Rocky")
+supported_os=("Ubuntu" "Debian" "Rocky")
 
 # Source the losd-lib.sh file.
 source $rundir/losd/losd-lib.sh
@@ -123,6 +123,7 @@ case $os_name in
         # Reboot the system
         shutdown -r now
     fi
+    ;;
 
     "Rocky")
 
